@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Artemis Expedition - Space Adventure</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="background-stars"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="terminal-header">
+            <div class="header-content">
+                <h1>⚡ ARTEMIS EXPEDITION TERMINAL</h1>
+                <div class="system-status">
+                    <span id="connection-status">🔴 DISCONNECTED</span>
+                    <span id="game-status">STANDBY</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <div class="game-container">
+            <!-- Left Sidebar: Player Status -->
+            <aside class="sidebar-left">
+                <div class="panel">
+                    <h2>👥 CREW ROSTER</h2>
+                    <div id="player-list" class="player-list">
+                        <p class="text-muted">Waiting for crew members...</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>📊 SHIP STATUS</h2>
+                    <div id="ship-status">
+                        <div class="resource-bar">
+                            <label>🔋 Power:</label>
+                            <div class="bar"><div class="bar-fill" id="power-bar" style="width: 100%"></div></div>
+                            <span id="power-value">100%</span>
+                        </div>
+                        <div class="resource-bar">
+                            <label>💨 Oxygen:</label>
+                            <div class="bar"><div class="bar-fill" id="oxygen-bar" style="width: 100%"></div></div>
+                            <span id="oxygen-value">100%</span>
+                        </div>
+                        <div class="resource-bar">
+                            <label>⛽ Fuel:</label>
+                            <div class="bar"><div class="bar-fill" id="fuel-bar" style="width: 100%"></div></div>
+                            <span id="fuel-value">100%</span>
+                        </div>
+                        <div class="resource-bar">
+                            <label>🍕 Food:</label>
+                            <div class="bar"><div class="bar-fill" id="food-bar" style="width: 100%"></div></div>
+                            <span id="food-value">100%</span>
+                        </div>
+                        <div class="stat-line">
+                            <label>🚀 Ship Integrity:</label>
+                            <span id="ship-condition">100%</span>
+                        </div>
+                        <div class="stat-line">
+                            <label>📍 Progress:</label>
+                            <span id="mission-progress">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>🎲 DICE ROLLER</h2>
+                    <div class="dice-controls">
+                        <button class="dice-btn" onclick="rollDice('1d6')">D6</button>
+                        <button class="dice-btn" onclick="rollDice('1d10')">D10</button>
+                        <button class="dice-btn" onclick="rollDice('1d20')">D20</button>
+                        <button class="dice-btn" onclick="rollDice('1d100')">D100</button>
+                    </div>
+                    <div id="dice-result" class="dice-result"></div>
+                </div>
+            </aside>
+
+            <!-- Center: Story and Actions -->
+            <main class="main-content">
+                <!-- Welcome Screen -->
+                <div id="welcome-screen" class="welcome-screen">
+                    <div class="logo">
+                        <pre class="ascii-art">
+    ╔═══════════════════════════════════════╗
+    ║   🚀 THE ARTEMIS EXPEDITION 🚀       ║
+    ║                                       ║
+    ║   A Space Adventure RPG               ║
+    ║   Multiplayer • Turn-Based • D&D      ║
+    ╚═══════════════════════════════════════╝
+                        </pre>
+                    </div>
+
+                    <div class="welcome-content">
+                        <h2>Welcome, Astronaut</h2>
+                        <p>Year 2045. Humanity's first asteroid mining expedition awaits.</p>
+                        <p>Join or create a mission. Work with your crew. Make choices that matter.</p>
+
+                        <div class="form-group">
+                            <label>Your Name:</label>
+                            <input type="text" id="player-name" placeholder="Enter your name" value="Astronaut">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Game ID (leave empty to create new):</label>
+                            <input type="text" id="game-id" placeholder="Game ID or empty for new game">
+                        </div>
+
+                        <button class="btn-primary" onclick="joinGame()">🚀 EMBARK ON MISSION</button>
+
+                        <div class="info-box">
+                            <p><strong>How to Play:</strong></p>
+                            <ul>
+                                <li>Support for 1-10 players</li>
+                                <li>Turn-based decisions with dice rolls</li>
+                                <li>Multiple storylines and endings</li>
+                                <li>Share the Game ID with your crew</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Screen -->
+                <div id="game-screen" class="game-screen" style="display: none;">
+                    <!-- Story Panel -->
+                    <div class="panel story-panel">
+                        <div class="panel-header">
+                            <h2>📖 MISSION LOG</h2>
+                            <div class="round-indicator">
+                                <span>Round: <strong id="round-number">0</strong></span>
+                                <span>Phase: <strong id="phase-name">Waiting</strong></span>
+                            </div>
+                        </div>
+                        <div id="story-text" class="story-text">
+                            <p class="text-muted">Waiting for mission to begin...</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Panel -->
+                    <div class="panel action-panel">
+                        <h2>⚡ ACTIONS</h2>
+                        <div id="choices-container" class="choices-container">
+                            <p class="text-muted">No actions available yet.</p>
+                        </div>
+                        <div class="game-controls">
+                            <button id="start-btn" class="btn-primary" onclick="startGame()" style="display: none;">
+                                🚀 START MISSION
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Event Log -->
+                    <div class="panel log-panel">
+                        <h2>📡 COMMUNICATION LOG</h2>
+                        <div id="event-log" class="event-log">
+                            <p class="text-muted">System online. Standing by...</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/game.js"></script>
+</body>
+</html>
